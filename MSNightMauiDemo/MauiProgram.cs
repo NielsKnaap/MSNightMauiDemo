@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using MSNightMauiDemo.ViewModels;
 
 namespace MSNightMauiDemo;
 
@@ -9,6 +10,8 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .RegisterPages()
+            .RegisterViewModels()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -20,5 +23,17 @@ public static class MauiProgram
 #endif
 
         return builder.Build();
+    }
+
+    private static MauiAppBuilder RegisterPages(this MauiAppBuilder mauiAppBuilder)
+    {
+        mauiAppBuilder.Services.AddSingleton<ShoppingListPage>();
+        return mauiAppBuilder;
+    }
+    
+    private static MauiAppBuilder RegisterViewModels(this MauiAppBuilder mauiAppBuilder)
+    {
+        mauiAppBuilder.Services.AddSingleton<ShoppingListViewModel>();
+        return mauiAppBuilder;
     }
 }

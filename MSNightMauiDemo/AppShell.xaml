@@ -6,10 +6,7 @@
     xmlns:local="clr-namespace:MSNightMauiDemo"
     Shell.FlyoutBehavior="Disabled"
     Title="MSNightMauiDemo">
-
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    
+    <TabBar x:Name="TabBar"/>
 
 </Shell>
