@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:observables="clr-namespace:MSNightMauiDemo.Observables"
              xmlns:viewModels="clr-namespace:MSNightMauiDemo.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="MSNightMauiDemo.ShoppingListPage"
              x:DataType="viewModels:ShoppingListViewModel"
              x:Name="shoppingListPage">
@@ -14,10 +15,11 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <CollectionView Grid.Row="0"
-                      BackgroundColor="Aqua"
                       ItemsSource="{Binding  ShoppingList}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="observables:Item">
+                        <VerticalStackLayout Padding="0, 0, 0, 1"
+                                               BackgroundColor="Black">
                             <SwipeView>
                                 <SwipeView.RightItems>
                                     <SwipeItems>
@@ -28,18 +30,30 @@
                                                    CommandParameter="{Binding .}"/>
                                     </SwipeItems>
                                 </SwipeView.RightItems>
-                                <Grid Padding="25" BackgroundColor="#EEEEEE">
+                                <Grid Padding="25" 
+                                      BackgroundColor="#EEEEEE">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer NumberOfTapsRequired="2"
+                                                              Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ShoppingListViewModel}}, Path=ToggleDoneStateCommand}"
+                                                              CommandParameter="{Binding .}"/>
+                                    </Grid.GestureRecognizers>
                                     <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <Label Grid.Column="0" Text="{Binding Name}" FontSize="18" />
-                                    <Label Grid.Column="1" Text="{Binding Count}" FontSize="18" />
+                                    <Image Grid.Column="0" 
+                                           Source="icon_check" 
+                                           IsVisible="{Binding Done}"/>
+                                    <Label Grid.Column="1" Text="{Binding Name}" FontSize="18" />
+                                    <Label Grid.Column="2" Text="{Binding Count}" FontSize="18" />
                                 </Grid>
                             </SwipeView>
+                        </VerticalStackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

@@ -8,4 +8,6 @@ public partial class Item : ObservableObject
     private string _name;
     [ObservableProperty] 
     private int _count;
+    [ObservableProperty] 
+    private bool _done;
 }

@@ -24,6 +24,12 @@ public partial class ShoppingListViewModel : ObservableObject
             Count = 2
         });
     }
+    [RelayCommand]
+    private void ToggleDoneState(Item item)
+    {
+        item.Done = !item.Done;
+        syncSavedShoppingList();
+    }
 
     public IRelayCommand<Item> DeleteItemCommand => _deleteItemCommand ?? new RelayCommand<Item>((item) =>
     {
