@@ -21,12 +21,24 @@
                         <VerticalStackLayout Padding="0, 0, 0, 1"
                                                BackgroundColor="Black">
                             <SwipeView>
-                                <SwipeView.RightItems>
+                                <SwipeView.LeftItems>
                                     <SwipeItems>
                                         <SwipeItem Text="Delete"
                                                    IconImageSource="icon_delete"
                                                    BackgroundColor="DarkRed"
                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ShoppingListViewModel}}, Path=DeleteItemCommand}"
+                                                   CommandParameter="{Binding .}"/>
+                                    </SwipeItems>
+                                </SwipeView.LeftItems>
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItem IconImageSource="icon_min"
+                                                   BackgroundColor="IndianRed"
+                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ShoppingListViewModel}}, Path=SubtractItemCommand}"
+                                                   CommandParameter="{Binding .}"/>
+                                        <SwipeItem IconImageSource="icon_plus"
+                                                   BackgroundColor="DarkOliveGreen"
+                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:ShoppingListViewModel}}, Path=IncrementItemCommand}"
                                                    CommandParameter="{Binding .}"/>
                                     </SwipeItems>
                                 </SwipeView.RightItems>
