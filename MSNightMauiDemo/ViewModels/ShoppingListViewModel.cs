@@ -2,12 +2,15 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MSNightMauiDemo.Observables;
+using Newtonsoft.Json;
 
 namespace MSNightMauiDemo.ViewModels;
 
 public partial class ShoppingListViewModel : ObservableObject
 {
-    private IRelayCommand<Item> _deleteItemCommand;
+    const string ShoppingListKey = "shopping_list";
+    
+    private IRelayCommand<Item>? _deleteItemCommand;
     private IRelayCommand<Item>? _incrementItemCommand;
     private IRelayCommand<Item>? _subtractItemCommand;
     [ObservableProperty]
@@ -17,16 +20,12 @@ public partial class ShoppingListViewModel : ObservableObject
 
     public ShoppingListViewModel()
     {
-        ShoppingList.Add(new Item
+        var savedShoppingList = Preferences.Get(ShoppingListKey, null);
+        if (savedShoppingList != null)
         {
-            Name = "Melk",
-            Count = 2
-        });
-        ShoppingList.Add(new Item
-        {
-            Name = "Eieren",
-            Count = 2
-        });
+            var parsedSavedShoppingList = JsonConvert.DeserializeObject<ObservableCollection<Item>>(savedShoppingList);
+            ShoppingList = parsedSavedShoppingList;
+        }
     }
 
     [RelayCommand]
@@ -51,11 +50,13 @@ public partial class ShoppingListViewModel : ObservableObject
     public IRelayCommand<Item> DeleteItemCommand => _deleteItemCommand ?? new RelayCommand<Item>((item) =>
     {
         ShoppingList.Remove(item);
+        syncSavedShoppingList();
     });
     
     public IRelayCommand<Item> IncrementItemCommand => _incrementItemCommand ?? new RelayCommand<Item>((item) =>
     {
         item.Count++;
+        syncSavedShoppingList();
     });
     
     public IRelayCommand<Item> SubtractItemCommand => _subtractItemCommand ?? new RelayCommand<Item>((item) =>
@@ -68,5 +69,12 @@ public partial class ShoppingListViewModel : ObservableObject
         {
             item.Count--;
         }
+        syncSavedShoppingList();
     });
+
+    private void syncSavedShoppingList()
+    {
+        var shoppingListJson = JsonConvert.SerializeObject(ShoppingList);
+        Preferences.Set(ShoppingListKey, shoppingListJson);
+    }
 }
