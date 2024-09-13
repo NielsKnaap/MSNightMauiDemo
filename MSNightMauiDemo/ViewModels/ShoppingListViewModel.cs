@@ -12,6 +12,8 @@ public partial class ShoppingListViewModel : ObservableObject
     private IRelayCommand<Item>? _subtractItemCommand;
     [ObservableProperty]
     private ObservableCollection<Item> _shoppingList = new ObservableCollection<Item>();
+    [ObservableProperty]
+    private string _newItemName;
 
     public ShoppingListViewModel()
     {
@@ -26,6 +28,19 @@ public partial class ShoppingListViewModel : ObservableObject
             Count = 2
         });
     }
+
+    [RelayCommand]
+    private void AddItem()
+    {
+        ShoppingList.Add(new Item
+        {
+            Name = NewItemName,
+            Count = 1
+        });
+        NewItemName = string.Empty;
+        syncSavedShoppingList();
+    }
+    
     [RelayCommand]
     private void ToggleDoneState(Item item)
     {
