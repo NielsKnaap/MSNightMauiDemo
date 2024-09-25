@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using MSNightMauiDemo.Pages;
 using MSNightMauiDemo.ViewModels;
 
 namespace MSNightMauiDemo;
@@ -30,12 +31,14 @@ public static class MauiProgram
     private static MauiAppBuilder RegisterPages(this MauiAppBuilder mauiAppBuilder)
     {
         mauiAppBuilder.Services.AddSingleton<ShoppingListPage>();
+        mauiAppBuilder.Services.AddSingleton<ShoppingListDetailPage>();
         return mauiAppBuilder;
     }
     
     private static MauiAppBuilder RegisterViewModels(this MauiAppBuilder mauiAppBuilder)
     {
         mauiAppBuilder.Services.AddSingleton<ShoppingListViewModel>();
+        mauiAppBuilder.Services.AddSingleton<ShoppingListDetailViewModel>();
         return mauiAppBuilder;
     }
 }

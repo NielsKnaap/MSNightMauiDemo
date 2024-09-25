@@ -10,13 +10,12 @@ public partial class ShoppingListViewModel : ObservableObject
 {
     const string ShoppingListKey = "shopping_list";
     
-    private IRelayCommand<Item>? _deleteItemCommand;
-    private IRelayCommand<Item>? _incrementItemCommand;
-    private IRelayCommand<Item>? _subtractItemCommand;
     [ObservableProperty]
     private ObservableCollection<Item> _shoppingList = new ObservableCollection<Item>();
     [ObservableProperty]
     private string _newItemName;
+    [ObservableProperty]
+    private Item? _selectedItem;
 
     public ShoppingListViewModel()
     {
@@ -26,6 +25,20 @@ public partial class ShoppingListViewModel : ObservableObject
             var parsedSavedShoppingList = JsonConvert.DeserializeObject<ObservableCollection<Item>>(savedShoppingList);
             ShoppingList = parsedSavedShoppingList;
         }
+    }
+
+    partial void OnSelectedItemChanged(Item? item)
+    {
+        if (item == null)
+        {
+            return;
+        }
+        
+        var parameter = new Dictionary<string, object>
+        {
+            { "SelectedItem", item }
+        };
+        Shell.Current.GoToAsync(nameof(ShoppingListDetailViewModel), parameter);
     }
 
     [RelayCommand]
@@ -39,27 +52,23 @@ public partial class ShoppingListViewModel : ObservableObject
         NewItemName = string.Empty;
         syncSavedShoppingList();
     }
-    
-    [RelayCommand]
-    private void ToggleDoneState(Item item)
-    {
-        item.Done = !item.Done;
-        syncSavedShoppingList();
-    }
 
-    public IRelayCommand<Item> DeleteItemCommand => _deleteItemCommand ?? new RelayCommand<Item>((item) =>
+    [RelayCommand]
+    private void DeleteItem(Item item)
     {
         ShoppingList.Remove(item);
         syncSavedShoppingList();
-    });
-    
-    public IRelayCommand<Item> IncrementItemCommand => _incrementItemCommand ?? new RelayCommand<Item>((item) =>
+    }
+
+    [RelayCommand]
+    private void IncrementItem(Item item)
     {
         item.Count++;
         syncSavedShoppingList();
-    });
-    
-    public IRelayCommand<Item> SubtractItemCommand => _subtractItemCommand ?? new RelayCommand<Item>((item) =>
+    }
+
+    [RelayCommand]
+    private void SubtractItem(Item item)
     {
         if (item.Count == 1)
         {
@@ -70,7 +79,21 @@ public partial class ShoppingListViewModel : ObservableObject
             item.Count--;
         }
         syncSavedShoppingList();
-    });
+    }
+    
+    [RelayCommand]
+    private void ToggleDoneState(Item item)
+    {
+        item.Done = !item.Done;
+        syncSavedShoppingList();
+    }
+    
+    [RelayCommand]
+    private void NavigateToDetailPage(Item item)
+    {
+        item.Done = !item.Done;
+        syncSavedShoppingList();
+    }
 
     private void syncSavedShoppingList()
     {

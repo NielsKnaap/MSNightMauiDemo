@@ -1,4 +1,5 @@
-﻿using MSNightMauiDemo.ViewModels;
+﻿using MSNightMauiDemo.Pages;
+using MSNightMauiDemo.ViewModels;
 
 namespace MSNightMauiDemo;
 
@@ -47,5 +48,6 @@ public partial class AppShell : Shell
     private void RegisterRoutes()
     {
         Routing.RegisterRoute(nameof(ShoppingListViewModel), typeof(ShoppingListPage));
+        Routing.RegisterRoute(nameof(ShoppingListDetailViewModel), typeof(ShoppingListDetailPage));
     }
 }

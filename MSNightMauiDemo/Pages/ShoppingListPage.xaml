@@ -15,7 +15,10 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <CollectionView Grid.Row="0"
-                      ItemsSource="{Binding  ShoppingList}">
+                      ItemsSource="{Binding  ShoppingList}"
+                      SelectionMode="Single"
+                      SelectedItem="{Binding SelectedItem}"
+                      EmptyView="No items to display">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="observables:Item">
                         <VerticalStackLayout Padding="0, 0, 0, 1"
